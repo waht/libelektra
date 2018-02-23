@@ -101,6 +101,7 @@ void elektraInternalnotificationUpdateRegisteredKeys (Plugin * plugin, KeySet * 
 		Key * key = ksLookupByName (keySet, registeredKey->name, 0);
 		if (key == NULL)
 		{
+			registeredKey = registeredKey->next;
 			continue;
 		}
 
