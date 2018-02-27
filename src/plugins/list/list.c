@@ -51,7 +51,7 @@ typedef struct
 	ElektraIoInterface * ioBinding;
 
 	ElektraNotificationCallback notificationCallback;
-	void * notificationPayload;
+	void * notificationContext;
 } Placements;
 
 static char lastIndex[ELEKTRA_MAX_ARRAY_SIZE];
@@ -250,7 +250,7 @@ int elektraListClose (Plugin * handle, Key * errorKey)
 
 static int runPlugins (KeySet * pluginKS, KeySet * modules, KeySet * plugins, KeySet * configOrig, KeySet * returned, Key * parentKey,
 		       OP op, Key * (*traversalFunction) (KeySet *), ElektraIoInterface * ioBinding,
-		       ElektraNotificationCallback notificationCallback, void * notificationPayload)
+		       ElektraNotificationCallback notificationCallback, ElektraNotificationCallbackContext * notificationContext)
 {
 	Key * current;
 
@@ -332,7 +332,7 @@ static int runPlugins (KeySet * pluginKS, KeySet * modules, KeySet * plugins, Ke
 			if (func)
 			{
 				ElektraNotificationOpenNotification openNotification = (ElektraNotificationOpenNotification)func;
-				openNotification (slave, notificationCallback, notificationPayload);
+				openNotification (slave, notificationCallback, notificationContext);
 			}
 		}
 		else
@@ -387,7 +387,7 @@ int elektraListGet (Plugin * handle, KeySet * returned, Key * parentKey)
 	KeySet * pluginKS = ksDup ((placements)->getKS[currentPlacement]);
 	ksRewind (pluginKS);
 	int ret = runPlugins (pluginKS, placements->modules, placements->plugins, ksDup (config), returned, parentKey, GET, ksNext,
-			      placements->ioBinding, placements->notificationCallback, placements->notificationPayload);
+			      placements->ioBinding, placements->notificationCallback, placements->notificationContext);
 	placements->getCurrent = ((++currentPlacement) % getEnd);
 	while (currentPlacement < getEnd && !placements->getPlacements[currentPlacement])
 	{
@@ -406,7 +406,7 @@ int elektraListSet (Plugin * handle, KeySet * returned, Key * parentKey)
 	ksRewind (pluginKS);
 	int ret = 0;
 	ret = runPlugins (pluginKS, placements->modules, placements->plugins, ksDup (config), returned, parentKey, SET, ksPop,
-			  placements->ioBinding, placements->notificationCallback, placements->notificationPayload);
+			  placements->ioBinding, placements->notificationCallback, placements->notificationContext);
 	placements->setCurrent = ((++currentPlacement) % setEnd);
 	while (currentPlacement < setEnd && !placements->setPlacements[currentPlacement])
 	{
@@ -426,7 +426,7 @@ int elektraListError (Plugin * handle, KeySet * returned, Key * parentKey)
 	KeySet * pluginKS = ksDup ((placements)->errKS[currentPlacement]);
 	ksRewind (pluginKS);
 	int ret = runPlugins (pluginKS, placements->modules, placements->plugins, ksDup (config), returned, parentKey, ERR, ksPop,
-			      placements->ioBinding, placements->notificationCallback, placements->notificationPayload);
+			      placements->ioBinding, placements->notificationCallback, placements->notificationContext);
 	placements->errCurrent = ((++currentPlacement) % errEnd);
 	while (currentPlacement < errEnd && !placements->errPlacements[currentPlacement])
 	{
@@ -498,18 +498,18 @@ void elektraListSetIoBinding (Plugin * handle, ElektraIoInterface * binding)
 	placements->ioBinding = binding;
 }
 
-void elektraListOpenNotification (Plugin * handle, ElektraNotificationCallback callback, void * data)
+void elektraListOpenNotification (Plugin * handle, ElektraNotificationCallback callback, ElektraNotificationCallbackContext * context)
 {
 	Placements * placements = elektraPluginGetData (handle);
 	placements->notificationCallback = callback;
-	placements->notificationPayload = data;
+	placements->notificationContext = context;
 }
 
 void elektraListCloseNotification (Plugin * handle)
 {
 	Placements * placements = elektraPluginGetData (handle);
 	placements->notificationCallback = NULL;
-	placements->notificationPayload = NULL;
+	placements->notificationContext = NULL;
 }
 
 Plugin * ELEKTRA_PLUGIN_EXPORT (list)
