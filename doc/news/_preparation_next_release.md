@@ -66,6 +66,10 @@ As always, the ABI and API of kdb.h is fully compatible, i.e. programs
 compiled against an older 0.8 version of Elektra will continue to work
 (ABI) and you will be able to recompile programs without errors (API).
 
+We added:
+
+- the private headerfiles `kdbnotificationinternal.h`.
+
 ## Notes for Maintainer
 
 These notes are of interest for people maintaining packages of Elektra:
@@ -124,5 +128,3 @@ For more information, see [https://libelektra.org](https://libelektra.org)
 
 Best regards,
 [Elektra Initiative](https://www.libelektra.org/developers/authors)
-
-
