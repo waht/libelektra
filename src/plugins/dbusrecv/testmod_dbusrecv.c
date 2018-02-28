@@ -84,6 +84,9 @@ static void test_prerequisites (void)
 	printf ("testing prerequisites\n");
 
 	DBusConnection * systemBus = getDbusConnection (DBUS_BUS_SYSTEM);
+	succeed_if (systemBus != NULL, "could not open system bus");
+	DBusConnection * sessionBus = getDbusConnection (DBUS_BUS_SESSION);
+	succeed_if (sessionBus != NULL, "could not open session bus");
 
 	exit_if_fail (systemBus != NULL, "could not get system message bus connection");
 
