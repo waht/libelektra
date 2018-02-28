@@ -91,6 +91,7 @@ static void test_prerequisites (void)
 	exit_if_fail (systemBus != NULL, "could not get system message bus connection");
 
 	dbus_connection_unref (systemBus);
+	dbus_connection_unref (sessionBus);
 }
 
 static void test_keyAdded (uv_loop_t * loop, ElektraIoInterface * binding)

@@ -164,7 +164,7 @@ before_script:
     -GNinja
     -DBUILD_STATIC=OFF
     -DPLUGINS="${plugins:-ALL;-jni;dbusrecv;internalnotification}"
-    -DBINDINGS="${bindings:MAINTAINED;-EXPERIMENTAL;-DEPRECATED;-swig_ruby;io_uv}"
+    -DBINDINGS="${bindings:-MAINTAINED;-EXPERIMENTAL;-DEPRECATED;-swig_ruby;io_uv}"
     -DENABLE_DEBUG=ON
     -DTOOLS="${tools:-ALL;}"
     -DINSTALL_SYSTEM_FILES=OFF
