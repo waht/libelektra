@@ -101,7 +101,7 @@ before_install:
       #DISABLEDbrew install yajl
       pip2 install cheetah # Required by kdb-gen
       # start dbus (session?) bus
-      #brew services start dbus
+      brew services start dbus
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" && "$HASKELL" == "ON" ]] ; then
