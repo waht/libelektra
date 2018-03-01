@@ -100,7 +100,7 @@ before_install:
       #DISABLEDbrew install swig
       #DISABLEDbrew install yajl
       pip2 install cheetah # Required by kdb-gen
-      # start dbus (session?) bus
+      # start D-Bus session bus
       brew services start dbus
     fi
   - |
