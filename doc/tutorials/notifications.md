@@ -11,7 +11,7 @@ Development state:
  - [x] notification wrapper (support for int and callback)
  - [ ] transport plugin zeromq
  - [ ] transport plugin dbus
- - [ ] transport plugin redis
+ - [-] transport plugin redis
  - [ ] internalnotification plugin & notfication wrapper (support for Elektra's basic types)
 
 
@@ -195,7 +195,7 @@ changed key needs further processing.
 #define ANSI_COLOR_RED			"\x1b[31m"
 #define ANSI_COLOR_GREEN		"\x1b[32m"
 
-void setTerminalColor (Key * color)
+void setTerminalColor (Key * color, void * context)
 {
 	char * value = keyString (color);
 
@@ -228,7 +228,7 @@ int main (void)
 	}
 
 	// Re-Initialize on key changes
-	int result = elektraNotificationRegisterCallback(repo, color, &setTerminalColor);
+	int result = elektraNotificationRegisterCallback(repo, color, &setTerminalColor, NULL);
 	if (!result) {
 		printf ("could not register callback!\n");
 		return -1;
